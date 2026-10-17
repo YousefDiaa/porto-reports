@@ -84,12 +84,12 @@ export default function ReportFilter({ specializations }: ReportFilterProps) {
   const hasActiveFilters = specId || period;
 
   return (
-    <div className="bg-white dark:bg-[#151D2F] rounded-2xl shadow-sm border border-slate-200 dark:border-[#222F49] p-6 mb-8 transition-colors duration-300">
-      <div className="flex items-center gap-2 mb-5">
-        <div className="w-8 h-8 rounded-lg bg-porto-pink/10 dark:bg-porto-pink/20 flex items-center justify-center">
+    <div className="bg-white dark:bg-[#151D2F] rounded-2xl shadow-sm border border-slate-200 dark:border-[#222F49] p-4 sm:p-6 mb-6 sm:mb-8 transition-colors duration-300">
+      <div className="flex items-center gap-2 mb-4 sm:mb-5 flex-wrap">
+        <div className="w-8 h-8 rounded-lg bg-porto-pink/10 dark:bg-porto-pink/20 flex items-center justify-center shrink-0">
           <Filter className="w-4 h-4 text-porto-pink dark:text-porto-cyan" />
         </div>
-        <h2 className="font-black text-slate-900 dark:text-white text-lg">تصفية وبحث في التقارير</h2>
+        <h2 className="font-black text-slate-900 dark:text-white text-base sm:text-lg">تصفية وبحث في التقارير</h2>
         {hasActiveFilters && (
           <button
             onClick={clearFilter}
@@ -241,7 +241,7 @@ export default function ReportFilter({ specializations }: ReportFilterProps) {
       <div className="flex justify-end mt-5 pt-4 border-t border-slate-100 dark:border-slate-800">
         <button
           onClick={applyFilter}
-          className="flex items-center gap-2 bg-gradient-to-r from-porto-pink to-porto-pink-dark hover:from-porto-pink-light hover:to-porto-pink text-white font-black px-6 py-2.5 rounded-xl transition-all shadow-porto hover:scale-105 active:scale-95"
+          className="flex items-center justify-center gap-2 bg-gradient-to-r from-porto-pink to-porto-pink-dark hover:from-porto-pink-light hover:to-porto-pink text-white font-black px-6 py-2.5 rounded-xl transition-all shadow-porto hover:scale-105 active:scale-95 w-full sm:w-auto"
         >
           <Search className="w-4 h-4" />
           تطبيق الفلتر

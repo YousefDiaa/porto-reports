@@ -39,12 +39,12 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#E4007C] via-[#B8005A] to-[#4A0027] dark:from-[#1A0311] dark:via-[#110D1F] dark:to-[#0B0F19] flex items-center justify-center p-4 relative overflow-hidden transition-colors duration-300">
       {/* Top action bar */}
-      <div className="absolute top-6 left-6 right-6 flex items-center justify-between z-20">
+      <div className="absolute top-4 sm:top-6 left-4 sm:left-6 right-4 sm:right-6 flex items-center justify-between z-20">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-white/90 hover:text-porto-yellow font-bold text-sm bg-black/20 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20 transition-all hover:scale-105"
+          className="inline-flex items-center gap-1.5 sm:gap-2 text-white/90 hover:text-porto-yellow font-bold text-xs sm:text-sm bg-black/20 backdrop-blur-md px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl border border-white/20 transition-all hover:scale-105"
         >
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           العودة للرئيسية
         </Link>
         <ThemeToggle />
@@ -56,10 +56,10 @@ export default function AdminLoginPage() {
         <div className="absolute bottom-1/4 left-1/4 w-96 h-96 rounded-full bg-porto-yellow blur-3xl" />
       </div>
 
-      <div className="w-full max-w-md relative z-10 animate-slide-up">
+      <div className="w-full max-w-md relative z-10 animate-slide-up mt-8 sm:mt-0">
         {/* Logo/Header */}
-        <div className="text-center mb-8">
-          <div className="w-24 h-24 rounded-3xl bg-white dark:bg-slate-900 border-4 border-porto-cyan p-2 flex items-center justify-center mx-auto mb-4 shadow-porto-cyan">
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border-4 border-porto-cyan p-2 flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-porto-cyan">
             <Image
               src="/porto-logo.png"
               alt="Porto Logo"
@@ -69,13 +69,13 @@ export default function AdminLoginPage() {
               priority
             />
           </div>
-          <h1 className="text-3xl font-black text-white mb-1 tracking-wide">لوحة تحكم الأدمن</h1>
-          <p className="text-porto-yellow text-sm font-bold">PORTO SPORTING CLUB</p>
+          <h1 className="text-2xl sm:text-3xl font-black text-white mb-1 tracking-wide">لوحة تحكم الأدمن</h1>
+          <p className="text-porto-yellow text-xs sm:text-sm font-bold">PORTO SPORTING CLUB</p>
         </div>
 
         {/* Login Form Card */}
-        <div className="bg-white dark:bg-[#151D2F] rounded-3xl shadow-2xl p-8 border border-slate-200 dark:border-[#222F49] transition-colors duration-300">
-          <h2 className="text-xl font-black text-slate-900 dark:text-white mb-6 text-center">
+        <div className="bg-white dark:bg-[#151D2F] rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 border border-slate-200 dark:border-[#222F49] transition-colors duration-300">
+          <h2 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white mb-5 sm:mb-6 text-center">
             تسجيل الدخول
           </h2>
 

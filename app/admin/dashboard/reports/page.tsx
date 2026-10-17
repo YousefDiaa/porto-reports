@@ -18,29 +18,29 @@ export default async function AdminReportsPage() {
   const reports = await getReports();
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="flex items-center justify-between mb-8">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 sm:mb-8">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white">إدارة التقارير</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">{reports.length} تقرير إجمالاً</p>
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">إدارة التقارير</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1 text-xs sm:text-sm font-medium">{reports.length} تقرير إجمالاً</p>
         </div>
         <Link
           href="/admin/dashboard/reports/new"
-          className="flex items-center gap-2 bg-gradient-to-r from-porto-pink to-porto-pink-dark hover:from-porto-pink-light hover:to-porto-pink text-white font-black px-5 py-2.5 rounded-xl transition-all shadow-porto hover:scale-105 active:scale-95"
+          className="flex items-center justify-center gap-2 bg-gradient-to-r from-porto-pink to-porto-pink-dark hover:from-porto-pink-light hover:to-porto-pink text-white font-black px-4 sm:px-5 py-2.5 rounded-xl transition-all shadow-porto hover:scale-105 active:scale-95 text-xs sm:text-sm w-full sm:w-auto"
         >
-          <PlusCircle className="w-5 h-5" />
-          تقرير جديد
+          <PlusCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span>تقرير جديد</span>
         </Link>
       </div>
 
       {reports.length === 0 ? (
-        <div className="bg-white dark:bg-[#151D2F] rounded-2xl shadow-sm border border-slate-200 dark:border-[#222F49] p-16 text-center">
-          <FileText className="w-16 h-16 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
-          <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">لا توجد تقارير بعد</h3>
-          <p className="text-slate-500 dark:text-slate-400 mb-6 font-medium">ابدأ بإنشاء أول تقرير لنادي بورتو الرياضي</p>
+        <div className="bg-white dark:bg-[#151D2F] rounded-2xl shadow-sm border border-slate-200 dark:border-[#222F49] p-8 sm:p-16 text-center">
+          <FileText className="w-12 h-12 sm:w-16 sm:h-16 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mb-2">لا توجد تقارير بعد</h3>
+          <p className="text-slate-500 dark:text-slate-400 mb-6 text-sm font-medium">ابدأ بإنشاء أول تقرير لنادي بورتو الرياضي</p>
           <Link
             href="/admin/dashboard/reports/new"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-porto-pink to-porto-pink-dark text-white font-bold px-6 py-3 rounded-xl transition-all hover:scale-105 shadow-porto"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-porto-pink to-porto-pink-dark text-white font-bold px-6 py-3 rounded-xl transition-all hover:scale-105 shadow-porto text-sm"
           >
             <PlusCircle className="w-5 h-5" />
             إنشاء تقرير

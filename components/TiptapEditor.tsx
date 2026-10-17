@@ -102,10 +102,10 @@ export default function TiptapEditor({ content, onChange, placeholder }: TiptapE
   return (
     <div className="border border-slate-200 dark:border-[#222F49] rounded-2xl overflow-hidden bg-white dark:bg-[#151D2F] shadow-sm transition-colors duration-300">
       <EditorToolbar editor={editor} onImageUpload={handleImageUpload} />
-      <div className="min-h-[450px] max-h-[700px] overflow-y-auto">
+      <div className="min-h-[320px] sm:min-h-[450px] max-h-[700px] overflow-y-auto">
         <EditorContent editor={editor} />
       </div>
-      <div className="border-t border-slate-200 dark:border-[#222F49] px-4 py-2.5 flex items-center justify-end gap-4 text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-[#101726]">
+      <div className="border-t border-slate-200 dark:border-[#222F49] px-3.5 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between sm:justify-end gap-3 sm:gap-4 text-[11px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-[#101726]">
         <span>{wordCount} كلمة</span>
         <span>{charCount} حرف</span>
       </div>

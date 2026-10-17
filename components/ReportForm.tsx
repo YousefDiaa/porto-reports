@@ -137,25 +137,25 @@ export default function ReportForm({ initialData }: ReportFormProps) {
     <div className="min-h-screen bg-slate-50 dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 transition-colors duration-300">
       {/* Top bar */}
       <div className="bg-white dark:bg-[#151D2F] border-b border-slate-200 dark:border-[#222F49] sticky top-0 z-30 shadow-sm transition-colors duration-300">
-        <div className="max-w-6xl mx-auto px-6 py-3.5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3.5 flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <Link
               href="/admin/dashboard/reports"
-              className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 hover:text-porto-pink dark:hover:text-porto-cyan transition-colors text-sm font-bold"
+              className="flex items-center gap-1 text-slate-500 dark:text-slate-400 hover:text-porto-pink dark:hover:text-porto-cyan transition-colors text-xs sm:text-sm font-bold shrink-0"
             >
               <ArrowRight className="w-4 h-4" />
-              التقارير
+              <span className="hidden sm:inline">التقارير</span>
             </Link>
-            <span className="text-slate-300 dark:text-slate-700">/</span>
-            <span className="font-black text-slate-900 dark:text-white text-sm">
+            <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">/</span>
+            <span className="font-black text-slate-900 dark:text-white text-xs sm:text-sm truncate">
               {initialData?.id ? "تعديل التقرير" : "إنشاء تقرير جديد"}
             </span>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
             {message && (
               <span
-                className={`text-xs px-3.5 py-1.5 rounded-xl font-bold animate-fade-in ${
+                className={`text-[11px] sm:text-xs px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-xl font-bold animate-fade-in ${
                   message.type === "success"
                     ? "bg-green-100 text-green-700 dark:bg-green-950/60 dark:text-green-300 border border-green-300 dark:border-green-800"
                     : "bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-300 border border-red-300 dark:border-red-800"
@@ -168,48 +168,48 @@ export default function ReportForm({ initialData }: ReportFormProps) {
               <Link
                 href={`/reports/${initialData.id}`}
                 target="_blank"
-                className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:text-porto-cyan transition-colors text-sm px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:border-porto-cyan font-bold"
+                className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:text-porto-cyan transition-colors text-xs sm:text-sm px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:border-porto-cyan font-bold"
               >
-                <Eye className="w-4 h-4" />
-                معاينة
+                <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">معاينة</span>
               </Link>
             )}
             <button
               onClick={() => handleSave(false)}
               disabled={saving}
-              className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-sm px-4 py-2 rounded-xl transition-all border border-slate-300 dark:border-slate-700 disabled:opacity-60"
+              className="flex items-center gap-1 sm:gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl transition-all border border-slate-300 dark:border-slate-700 disabled:opacity-60"
             >
-              <Save className="w-4 h-4" />
-              حفظ مسودة
+              <Save className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span>مسودة</span>
             </button>
             <button
               onClick={() => handleSave(true)}
               disabled={saving}
-              className="flex items-center gap-1.5 bg-gradient-to-r from-porto-pink to-porto-pink-dark hover:from-porto-pink-light hover:to-porto-pink text-white font-black text-sm px-5 py-2 rounded-xl transition-all shadow-porto hover:scale-105 active:scale-95 disabled:opacity-60"
+              className="flex items-center gap-1 sm:gap-1.5 bg-gradient-to-r from-porto-pink to-porto-pink-dark hover:from-porto-pink-light hover:to-porto-pink text-white font-black text-xs sm:text-sm px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-xl transition-all shadow-porto hover:scale-105 active:scale-95 disabled:opacity-60"
             >
               {saving ? (
-                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
-                <Send className="w-4 h-4" />
+                <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               )}
-              {isPublished ? "تحديث ونشر" : "نشر التقرير"}
+              <span>{isPublished ? "تحديث" : "نشر"}</span>
             </button>
           </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
           {/* Main Editor */}
           <div className="lg:col-span-3 space-y-4">
             {/* Title */}
-            <div className="bg-white dark:bg-[#151D2F] rounded-2xl shadow-sm border border-slate-200 dark:border-[#222F49] p-5 transition-colors duration-300">
+            <div className="bg-white dark:bg-[#151D2F] rounded-2xl shadow-sm border border-slate-200 dark:border-[#222F49] p-4 sm:p-5 transition-colors duration-300">
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="عنوان التقرير..."
-                className="w-full text-2xl font-black text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none border-none bg-transparent"
+                className="w-full text-xl sm:text-2xl font-black text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none border-none bg-transparent"
                 dir="rtl"
               />
             </div>

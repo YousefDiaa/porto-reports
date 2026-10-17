@@ -52,7 +52,7 @@ function ToolbarButton({
       disabled={disabled}
       title={title}
       className={cn(
-        "p-2 rounded-xl transition-all duration-150 flex items-center justify-center",
+        "p-1.5 sm:p-2 rounded-xl transition-all duration-150 flex items-center justify-center shrink-0",
         isActive
           ? "bg-gradient-to-r from-porto-pink to-porto-pink-dark text-white shadow-sm"
           : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-porto-pink dark:hover:text-porto-cyan",
@@ -65,7 +65,7 @@ function ToolbarButton({
 }
 
 function ToolbarDivider() {
-  return <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1" />;
+  return <div className="w-px h-5 sm:h-6 bg-slate-200 dark:bg-slate-700 mx-0.5 sm:mx-1 shrink-0" />;
 }
 
 export default function EditorToolbar({ editor, onImageUpload }: EditorToolbarProps) {
@@ -86,7 +86,7 @@ export default function EditorToolbar({ editor, onImageUpload }: EditorToolbarPr
   };
 
   return (
-    <div className="border-b border-slate-200 dark:border-[#222F49] bg-white dark:bg-[#151D2F] px-3.5 py-2.5 flex items-center flex-wrap gap-1 transition-colors duration-300">
+    <div className="border-b border-slate-200 dark:border-[#222F49] bg-white dark:bg-[#151D2F] px-2 sm:px-3.5 py-1.5 sm:py-2.5 flex items-center flex-wrap gap-0.5 sm:gap-1 transition-colors duration-300">
       {/* History */}
       <ToolbarButton
         onClick={() => editor.chain().focus().undo().run()}
@@ -168,10 +168,10 @@ export default function EditorToolbar({ editor, onImageUpload }: EditorToolbarPr
       </ToolbarButton>
 
       {/* Text Color Dropdown */}
-      <div className="relative group" title="لون النص">
+      <div className="relative group shrink-0" title="لون النص">
         <button
           type="button"
-          className="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-porto-pink transition-all flex items-center"
+          className="p-1.5 sm:p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-porto-pink transition-all flex items-center shrink-0"
         >
           <Palette className="w-4 h-4" />
         </button>

@@ -106,36 +106,36 @@ export default function ExportPage() {
   };
 
   return (
-    <div className="p-8 max-w-5xl">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-5xl">
       <div className="mb-6">
-        <h1 className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-3">
-          <Download className="w-7 h-7 text-porto-pink" />
+        <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2.5 sm:gap-3">
+          <Download className="w-6 h-6 sm:w-7 sm:h-7 text-porto-pink shrink-0" />
           تصدير مجمع للتقارير
         </h1>
-        <p className="text-slate-600 dark:text-slate-400 mt-1">
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
           صدّر مجموعة تقارير في ملف PDF أو Word واحد حسب الفترة الزمنية والتخصص
         </p>
       </div>
 
       {/* Filter */}
-      <div className="bg-white dark:bg-[#151D2F] rounded-xl shadow-porto border border-slate-200 dark:border-[#222F49] p-6 mb-6">
-        <h2 className="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-          <Filter className="w-5 h-5 text-porto-cyan" />
+      <div className="bg-white dark:bg-[#151D2F] rounded-2xl shadow-sm border border-slate-200 dark:border-[#222F49] p-4 sm:p-6 mb-6 transition-colors duration-300">
+        <h2 className="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2 text-sm sm:text-base">
+          <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-porto-cyan shrink-0" />
           حدد الفلتر
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4 mb-4">
           {/* Specialization */}
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
-              <Tags className="w-4 h-4 text-porto-pink" />
+            <label className="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
+              <Tags className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-porto-pink shrink-0" />
               التخصص
             </label>
             <div className="relative">
               <select
                 value={specId}
                 onChange={(e) => setSpecId(e.target.value)}
-                className="w-full border border-slate-200 dark:border-[#222F49] rounded-lg px-4 py-2.5 bg-white dark:bg-[#0B0F19] text-slate-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-porto-pink text-sm"
+                className="w-full border border-slate-200 dark:border-[#222F49] rounded-xl px-3.5 sm:px-4 py-2.5 bg-white dark:bg-[#0B0F19] text-slate-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-porto-pink text-xs sm:text-sm"
               >
                 <option value="">جميع التخصصات</option>
                 {specializations.map((s) => (
@@ -148,15 +148,15 @@ export default function ExportPage() {
 
           {/* Period */}
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
-              <Calendar className="w-4 h-4 text-porto-cyan" />
+            <label className="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-porto-cyan shrink-0" />
               الفترة الزمنية
             </label>
             <div className="relative">
               <select
                 value={period}
                 onChange={(e) => setPeriod(e.target.value)}
-                className="w-full border border-slate-200 dark:border-[#222F49] rounded-lg px-4 py-2.5 bg-white dark:bg-[#0B0F19] text-slate-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-porto-pink text-sm"
+                className="w-full border border-slate-200 dark:border-[#222F49] rounded-xl px-3.5 sm:px-4 py-2.5 bg-white dark:bg-[#0B0F19] text-slate-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-porto-pink text-xs sm:text-sm"
               >
                 {PERIODS.map((p) => (
                   <option key={p.value} value={p.value}>{p.label}</option>
@@ -168,12 +168,12 @@ export default function ExportPage() {
 
           {/* Year */}
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">السنة</label>
+            <label className="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">السنة</label>
             <div className="relative">
               <select
                 value={year}
                 onChange={(e) => setYear(e.target.value)}
-                className="w-full border border-slate-200 dark:border-[#222F49] rounded-lg px-4 py-2.5 bg-white dark:bg-[#0B0F19] text-slate-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-porto-pink text-sm"
+                className="w-full border border-slate-200 dark:border-[#222F49] rounded-xl px-3.5 sm:px-4 py-2.5 bg-white dark:bg-[#0B0F19] text-slate-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-porto-pink text-xs sm:text-sm"
               >
                 {YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
               </select>
@@ -184,12 +184,12 @@ export default function ExportPage() {
           {/* Month */}
           {period === "monthly" && (
             <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">الشهر</label>
+              <label className="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">الشهر</label>
               <div className="relative">
                 <select
                   value={month}
                   onChange={(e) => setMonth(e.target.value)}
-                  className="w-full border border-slate-200 dark:border-[#222F49] rounded-lg px-4 py-2.5 bg-white dark:bg-[#0B0F19] text-slate-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-porto-pink text-sm"
+                  className="w-full border border-slate-200 dark:border-[#222F49] rounded-xl px-3.5 sm:px-4 py-2.5 bg-white dark:bg-[#0B0F19] text-slate-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-porto-pink text-xs sm:text-sm"
                 >
                   {MONTHS.map((m, i) => <option key={i + 1} value={i + 1}>{m}</option>)}
                 </select>
@@ -201,12 +201,12 @@ export default function ExportPage() {
           {/* Quarter */}
           {period === "quarterly" && (
             <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">الربع</label>
+              <label className="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">الربع</label>
               <div className="relative">
                 <select
                   value={quarter}
                   onChange={(e) => setQuarter(e.target.value)}
-                  className="w-full border border-slate-200 dark:border-[#222F49] rounded-lg px-4 py-2.5 bg-white dark:bg-[#0B0F19] text-slate-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-porto-pink text-sm"
+                  className="w-full border border-slate-200 dark:border-[#222F49] rounded-xl px-3.5 sm:px-4 py-2.5 bg-white dark:bg-[#0B0F19] text-slate-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-porto-pink text-xs sm:text-sm"
                 >
                   {QUARTERS.map((q, i) => <option key={i + 1} value={i + 1}>{q}</option>)}
                 </select>
@@ -218,12 +218,12 @@ export default function ExportPage() {
           {/* Half year */}
           {period === "semi-annual" && (
             <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">النصف</label>
+              <label className="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">النصف</label>
               <div className="relative">
                 <select
                   value={half}
                   onChange={(e) => setHalf(e.target.value)}
-                  className="w-full border border-slate-200 dark:border-[#222F49] rounded-lg px-4 py-2.5 bg-white dark:bg-[#0B0F19] text-slate-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-porto-pink text-sm"
+                  className="w-full border border-slate-200 dark:border-[#222F49] rounded-xl px-3.5 sm:px-4 py-2.5 bg-white dark:bg-[#0B0F19] text-slate-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-porto-pink text-xs sm:text-sm"
                 >
                   {HALF_YEARS.map((h, i) => <option key={i + 1} value={i + 1}>{h}</option>)}
                 </select>
@@ -236,7 +236,7 @@ export default function ExportPage() {
         <button
           onClick={handleSearch}
           disabled={searching}
-          className="flex items-center gap-2 bg-gradient-to-r from-porto-pink to-[#c40068] hover:opacity-95 text-white font-bold px-5 py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-60 cursor-pointer"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-porto-pink to-porto-pink-dark hover:from-porto-pink-light hover:to-porto-pink text-white font-bold px-5 py-2.5 rounded-xl transition-all shadow-md hover:shadow-lg disabled:opacity-60 cursor-pointer"
         >
           {searching ? (
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -249,56 +249,56 @@ export default function ExportPage() {
 
       {/* Results */}
       {searched && (
-        <div className="bg-white dark:bg-[#151D2F] rounded-xl shadow-porto border border-slate-200 dark:border-[#222F49] p-6 animate-fade-in">
+        <div className="bg-white dark:bg-[#151D2F] rounded-2xl shadow-sm border border-slate-200 dark:border-[#222F49] p-4 sm:p-6 animate-fade-in transition-colors duration-300">
           {foundReports.length === 0 ? (
             <div className="text-center py-8">
-              <FileText className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-              <h3 className="font-bold text-slate-900 dark:text-white mb-1">لا توجد تقارير</h3>
-              <p className="text-slate-500 dark:text-slate-400 text-sm">لا توجد تقارير منشورة للفترة المحددة.</p>
+              <FileText className="w-10 h-10 sm:w-12 sm:h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+              <h3 className="font-bold text-slate-900 dark:text-white mb-1 text-sm sm:text-base">لا توجد تقارير</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm">لا توجد تقارير منشورة للفترة المحددة.</p>
             </div>
           ) : (
             <>
-              <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3 sm:gap-4">
                 <div>
-                  <h2 className="font-bold text-slate-900 dark:text-white text-lg">
+                  <h2 className="font-bold text-slate-900 dark:text-white text-base sm:text-lg">
                     {foundReports.length} تقرير — {buildPeriodLabel()}
                   </h2>
                   {specId && (
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                    <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
                       تخصص: {specializations.find((s) => s.id === specId)?.name}
                     </p>
                   )}
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-full sm:w-auto">
                   <button
                     onClick={handleExportPDF}
                     disabled={exportingPdf}
-                    className="flex items-center gap-1.5 bg-gradient-to-r from-red-600 to-rose-700 hover:opacity-95 text-white font-bold text-sm px-4 py-2.5 rounded-lg transition-all shadow-sm hover:shadow-md disabled:opacity-60 cursor-pointer"
+                    className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-gradient-to-r from-red-600 to-rose-700 hover:opacity-95 text-white font-bold text-xs sm:text-sm px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all shadow-sm hover:shadow-md disabled:opacity-60 cursor-pointer"
                   >
-                    <Download className="w-4 h-4" />
+                    <Download className="w-4 h-4 shrink-0" />
                     {exportingPdf ? "جارٍ..." : "تصدير PDF"}
                   </button>
                   <button
                     onClick={handleExportWord}
                     disabled={exportingWord}
-                    className="flex items-center gap-1.5 bg-gradient-to-r from-porto-cyan to-[#0084B4] hover:opacity-95 text-white font-bold text-sm px-4 py-2.5 rounded-lg transition-all shadow-sm hover:shadow-md disabled:opacity-60 cursor-pointer"
+                    className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-gradient-to-r from-porto-cyan to-[#0084B4] hover:opacity-95 text-white font-bold text-xs sm:text-sm px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all shadow-sm hover:shadow-md disabled:opacity-60 cursor-pointer"
                   >
-                    <FileText className="w-4 h-4" />
+                    <FileText className="w-4 h-4 shrink-0" />
                     {exportingWord ? "جارٍ..." : "تصدير Word"}
                   </button>
                 </div>
               </div>
 
-              <div className="divide-y divide-slate-100 dark:divide-[#222F49] border border-slate-200 dark:border-[#222F49] rounded-lg overflow-hidden">
+              <div className="divide-y divide-slate-100 dark:divide-[#222F49] border border-slate-200 dark:border-[#222F49] rounded-xl overflow-hidden">
                 {foundReports.map((r) => (
-                  <div key={r.id} className="px-4 py-3 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-[#0B0F19]/60 transition-colors">
-                    <div>
-                      <span className="font-semibold text-slate-800 dark:text-slate-200 text-sm">{r.title}</span>
-                      <span className="text-slate-500 dark:text-slate-400 text-xs mr-3">
+                  <div key={r.id} className="px-3.5 sm:px-4 py-3 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-[#0B0F19]/60 transition-colors">
+                    <div className="min-w-0 pr-2">
+                      <span className="font-semibold text-slate-800 dark:text-slate-200 text-xs sm:text-sm line-clamp-1">{r.title}</span>
+                      <span className="text-slate-500 dark:text-slate-400 text-[11px] sm:text-xs">
                         {new Date(r.report_date).toLocaleDateString("ar-EG", { day: "numeric", month: "long" })}
                       </span>
                     </div>
-                    <FileText className="w-4 h-4 text-slate-400 dark:text-slate-500" />
+                    <FileText className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0" />
                   </div>
                 ))}
               </div>

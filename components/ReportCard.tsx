@@ -16,12 +16,12 @@ export default function ReportCard({ report }: ReportCardProps) {
       {/* Top accent bar with Porto shield colors (pink, cyan, yellow) */}
       <div className="h-1.5 bg-gradient-to-r from-porto-pink via-porto-cyan to-porto-yellow" />
 
-      <div className="p-6 flex-1 flex flex-col">
+      <div className="p-4 sm:p-6 flex-1 flex flex-col">
         {/* Meta badges */}
-        <div className="flex items-center gap-2 mb-3.5 flex-wrap">
+        <div className="flex items-center gap-2 mb-3 sm:mb-3.5 flex-wrap">
           {spec && (
             <span
-              className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full border"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 sm:px-3 py-1 rounded-full border"
               style={{
                 backgroundColor: `${spec.color}15`,
                 borderColor: `${spec.color}40`,
@@ -39,7 +39,7 @@ export default function ReportCard({ report }: ReportCardProps) {
         </div>
 
         {/* Title */}
-        <h3 className="text-lg font-black text-slate-900 dark:text-white mb-3 line-clamp-2 group-hover:text-porto-pink dark:group-hover:text-porto-cyan transition-colors leading-snug">
+        <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white mb-2.5 sm:mb-3 line-clamp-2 group-hover:text-porto-pink dark:group-hover:text-porto-cyan transition-colors leading-snug">
           {report.title}
         </h3>
 

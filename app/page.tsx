@@ -77,31 +77,33 @@ export default async function HomePage({
       <Header />
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-[#E4007C] via-[#B8005A] to-[#6B0035] dark:from-[#330822] dark:via-[#1A162B] dark:to-[#0B0F19] text-white py-16 px-4 relative overflow-hidden border-b-2 border-porto-cyan/40">
+      <div className="bg-gradient-to-br from-[#E4007C] via-[#B8005A] to-[#6B0035] dark:from-[#330822] dark:via-[#1A162B] dark:to-[#0B0F19] text-white py-10 sm:py-16 px-4 relative overflow-hidden border-b-2 border-porto-cyan/40">
         <div className="absolute inset-0 opacity-15">
           <div className="absolute top-0 right-1/4 w-80 h-80 rounded-full bg-porto-cyan blur-3xl" />
           <div className="absolute bottom-0 left-1/4 w-80 h-80 rounded-full bg-porto-yellow blur-3xl" />
         </div>
         <div className="max-w-7xl mx-auto text-center relative z-10">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <BookOpen className="w-8 h-8 text-porto-yellow" />
-            <h1 className="text-3xl md:text-5xl font-black tracking-wide">
+          <div className="flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-porto-yellow shrink-0" />
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-wide">
               التقارير الرسمية
             </h1>
           </div>
-          <p className="text-white/90 text-lg md:text-xl font-medium max-w-2xl mx-auto">
+          <p className="text-white/90 text-sm sm:text-lg md:text-xl font-medium max-w-2xl mx-auto px-2">
             بوابة تقارير وأنشطة نادي بورتو الرياضي — عامر جروب
           </p>
-          <div className="mt-6 inline-flex items-center gap-2 bg-black/25 backdrop-blur-md border border-white/20 text-porto-yellow px-5 py-2.5 rounded-full text-sm font-bold shadow-md">
-            <FileText className="w-4 h-4 text-porto-cyan" />
-            {reports.length} تقرير متاح
-            {activeSpecName && ` — ${activeSpecName}`}
+          <div className="mt-4 sm:mt-6 inline-flex items-center gap-2 bg-black/25 backdrop-blur-md border border-white/20 text-porto-yellow px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold shadow-md max-w-full">
+            <FileText className="w-4 h-4 text-porto-cyan shrink-0" />
+            <span className="truncate">
+              {reports.length} تقرير متاح
+              {activeSpecName && ` — ${activeSpecName}`}
+            </span>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-10">
         {/* Filter */}
         <Suspense fallback={null}>
           <ReportFilter specializations={specializations} />
@@ -109,16 +111,16 @@ export default async function HomePage({
 
         {/* Reports Grid */}
         {reports.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {reports.map((report) => (
               <ReportCard key={report.id} report={report as Report & { specializations?: Specialization }} />
             ))}
           </div>
         ) : (
-          <div className="text-center py-24 bg-white dark:bg-[#151D2F] rounded-2xl border border-slate-200 dark:border-[#222F49] shadow-sm">
-            <FileText className="w-16 h-16 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200 mb-2">لا توجد تقارير</h3>
-            <p className="text-slate-500 dark:text-slate-400">
+          <div className="text-center py-12 sm:py-24 px-4 bg-white dark:bg-[#151D2F] rounded-2xl border border-slate-200 dark:border-[#222F49] shadow-sm">
+            <FileText className="w-12 h-12 sm:w-16 sm:h-16 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
+            <h3 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200 mb-2">لا توجد تقارير</h3>
+            <p className="text-slate-500 dark:text-slate-400 text-sm sm:text-base max-w-md mx-auto">
               {Object.keys(params).length > 0
                 ? "لا توجد تقارير تطابق الفلتر المحدد. جرب تغيير خيارات البحث."
                 : "لم يتم نشر أي تقارير بعد."}
