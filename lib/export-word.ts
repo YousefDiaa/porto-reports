@@ -10,6 +10,7 @@ import {
   TableCell,
   WidthType,
   BorderStyle,
+  ImageRun,
 } from "docx";
 import { saveAs } from "file-saver";
 import { Report, Specialization } from "./supabase";
@@ -28,6 +29,92 @@ interface InlineStyle {
   underline?: boolean;
   color?: string;
   size?: number;
+}
+
+function getImageType(src: string): "jpg" | "png" | "gif" | "bmp" {
+  const clean = src.toLowerCase().split("?")[0];
+  if (
+    clean.endsWith(".jpg") ||
+    clean.endsWith(".jpeg") ||
+    clean.includes("image/jpeg") ||
+    clean.includes("image/jpg")
+  ) {
+    return "jpg";
+  }
+  if (clean.endsWith(".gif") || clean.includes("image/gif")) {
+    return "gif";
+  }
+  if (clean.endsWith(".bmp") || clean.includes("image/bmp")) {
+    return "bmp";
+  }
+  return "png";
+}
+
+async function fetchImageForDocx(
+  src: string
+): Promise<{ data: Uint8Array; width: number; height: number; type: "jpg" | "png" | "gif" | "bmp" } | null> {
+  try {
+    let resolvedSrc = src.trim();
+    if (resolvedSrc.startsWith("/") && typeof window !== "undefined") {
+      resolvedSrc = window.location.origin + resolvedSrc;
+    }
+
+    let arrayBuffer: ArrayBuffer;
+    let width = 500;
+    let height = 300;
+
+    if (resolvedSrc.startsWith("data:")) {
+      const parts = resolvedSrc.split(",");
+      const base64Data = parts[1];
+      const binaryString = atob(base64Data);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      arrayBuffer = bytes.buffer;
+    } else {
+      const res = await fetch(resolvedSrc);
+      if (!res.ok) return null;
+      arrayBuffer = await res.arrayBuffer();
+    }
+
+    // Try to calculate aspect ratio in browser
+    if (typeof window !== "undefined") {
+      await new Promise<void>((resolve) => {
+        const img = new window.Image();
+        img.onload = () => {
+          const maxWidth = 550;
+          const naturalW = img.naturalWidth || 500;
+          const naturalH = img.naturalHeight || 300;
+          if (naturalW > maxWidth) {
+            width = maxWidth;
+            height = Math.round((naturalH * maxWidth) / naturalW);
+          } else {
+            width = naturalW;
+            height = naturalH;
+          }
+          resolve();
+        };
+        img.onerror = () => {
+          width = 500;
+          height = 300;
+          resolve();
+        };
+        img.src = resolvedSrc;
+      });
+    }
+
+    return {
+      data: new Uint8Array(arrayBuffer),
+      width,
+      height,
+      type: getImageType(src),
+    };
+  } catch (err) {
+    console.warn("Could not fetch image for Word docx:", src, err);
+    return null;
+  }
 }
 
 // ----------------------------------------------------------------------
@@ -58,7 +145,7 @@ function parseInlineContent(node: TiptapNode): TextRun[] {
   return [];
 }
 
-function parseNode(node: TiptapNode): (Paragraph | Table)[] {
+async function parseNode(node: TiptapNode): Promise<(Paragraph | Table)[]> {
   switch (node.type) {
     case "heading": {
       const level = (node.attrs?.level as number) || 1;
@@ -91,6 +178,32 @@ function parseNode(node: TiptapNode): (Paragraph | Table)[] {
       ];
     }
 
+    case "image": {
+      const src = (node.attrs?.src as string) || "";
+      if (src) {
+        const img = await fetchImageForDocx(src);
+        if (img) {
+          return [
+            new Paragraph({
+              children: [
+                new ImageRun({
+                  data: img.data,
+                  transformation: {
+                    width: img.width,
+                    height: img.height,
+                  },
+                  type: img.type,
+                }),
+              ],
+              alignment: AlignmentType.CENTER,
+              spacing: { before: 200, after: 200 },
+            }),
+          ];
+        }
+      }
+      return [];
+    }
+
     case "bulletList":
     case "orderedList": {
       return (node.content || []).flatMap((listItem, idx) => {
@@ -115,15 +228,32 @@ function parseNode(node: TiptapNode): (Paragraph | Table)[] {
     }
 
     case "table": {
-      const rows = (node.content || []).map((row) => {
-        const cells = (row.content || []).map((cell) => {
-          return new TableCell({
-            children: (cell.content || []).flatMap(parseNode).filter((n): n is Paragraph => n instanceof Paragraph),
-            width: { size: 2000, type: WidthType.DXA },
-          });
-        });
-        return new TableRow({ children: cells });
-      });
+      const rows: TableRow[] = [];
+      for (const row of node.content || []) {
+        const cells: TableCell[] = [];
+        for (const cell of row.content || []) {
+          const cellParagraphs: Paragraph[] = [];
+          for (const item of cell.content || []) {
+            const parsed = await parseNode(item);
+            cellParagraphs.push(
+              ...parsed.filter((n): n is Paragraph => n instanceof Paragraph)
+            );
+          }
+          cells.push(
+            new TableCell({
+              children: cellParagraphs.length > 0 ? cellParagraphs : [new Paragraph("")],
+              width: { size: 2000, type: WidthType.DXA },
+              borders: {
+                top: { style: BorderStyle.SINGLE, size: 1, color: "CBD5E1" },
+                bottom: { style: BorderStyle.SINGLE, size: 1, color: "CBD5E1" },
+                left: { style: BorderStyle.SINGLE, size: 1, color: "CBD5E1" },
+                right: { style: BorderStyle.SINGLE, size: 1, color: "CBD5E1" },
+              },
+            })
+          );
+        }
+        rows.push(new TableRow({ children: cells }));
+      }
 
       return [
         new Table({
@@ -134,19 +264,27 @@ function parseNode(node: TiptapNode): (Paragraph | Table)[] {
     }
 
     case "blockquote": {
-      return (node.content || []).flatMap(parseNode);
+      const result: (Paragraph | Table)[] = [];
+      for (const child of node.content || []) {
+        result.push(...(await parseNode(child)));
+      }
+      return result;
     }
 
     default:
       if (node.content) {
-        return node.content.flatMap(parseNode);
+        const result: (Paragraph | Table)[] = [];
+        for (const child of node.content) {
+          result.push(...(await parseNode(child)));
+        }
+        return result;
       }
       return [];
   }
 }
 
 // ----------------------------------------------------------------------
-// 2. HTML to Docx AST (Reliable fallback whenever JSON is missing/empty)
+// 2. HTML to Docx AST (Reliable fallback with Image Support)
 // ----------------------------------------------------------------------
 
 function parseInlineNodes(node: Node, currentStyle: InlineStyle = {}): TextRun[] {
@@ -176,6 +314,11 @@ function parseInlineNodes(node: Node, currentStyle: InlineStyle = {}): TextRun[]
       const el = child as HTMLElement;
       const tag = el.tagName.toUpperCase();
 
+      if (tag === "IMG") {
+        // Skip inline img here, handled in block parser
+        continue;
+      }
+
       const newStyle: InlineStyle = {
         ...currentStyle,
         bold: currentStyle.bold || tag === "STRONG" || tag === "B",
@@ -191,7 +334,7 @@ function parseInlineNodes(node: Node, currentStyle: InlineStyle = {}): TextRun[]
   return runs;
 }
 
-function parseHtmlBody(body: HTMLElement): (Paragraph | Table)[] {
+async function parseHtmlBody(body: HTMLElement): Promise<(Paragraph | Table)[]> {
   const elements: (Paragraph | Table)[] = [];
 
   for (let i = 0; i < body.childNodes.length; i++) {
@@ -200,7 +343,30 @@ function parseHtmlBody(body: HTMLElement): (Paragraph | Table)[] {
       const el = node as HTMLElement;
       const tag = el.tagName.toUpperCase();
 
-      if (tag === "H1" || tag === "H2" || tag === "H3" || tag === "H4") {
+      if (tag === "IMG") {
+        const src = el.getAttribute("src") || (el as HTMLImageElement).src || "";
+        if (src) {
+          const img = await fetchImageForDocx(src);
+          if (img) {
+            elements.push(
+              new Paragraph({
+                children: [
+                  new ImageRun({
+                    data: img.data,
+                    transformation: {
+                      width: img.width,
+                      height: img.height,
+                    },
+                    type: img.type,
+                  }),
+                ],
+                alignment: AlignmentType.CENTER,
+                spacing: { before: 200, after: 200 },
+              })
+            );
+          }
+        }
+      } else if (tag === "H1" || tag === "H2" || tag === "H3" || tag === "H4") {
         const headingMap: Record<string, (typeof HeadingLevel)[keyof typeof HeadingLevel]> = {
           H1: HeadingLevel.HEADING_1,
           H2: HeadingLevel.HEADING_2,
@@ -225,15 +391,64 @@ function parseHtmlBody(body: HTMLElement): (Paragraph | Table)[] {
           );
         }
       } else if (tag === "P") {
-        const runs = parseInlineNodes(el);
-        if (runs.length > 0) {
-          elements.push(
-            new Paragraph({
-              children: runs,
-              alignment: AlignmentType.RIGHT,
-              spacing: { after: 120 },
-            })
-          );
+        // If paragraph contains <img>, extract both text and image
+        const imgEl = el.querySelector("img");
+        if (imgEl) {
+          for (let c = 0; c < el.childNodes.length; c++) {
+            const childNode = el.childNodes[c];
+            if (
+              childNode.nodeType === 1 &&
+              (childNode as HTMLElement).tagName.toUpperCase() === "IMG"
+            ) {
+              const src =
+                (childNode as HTMLElement).getAttribute("src") ||
+                (childNode as HTMLImageElement).src ||
+                "";
+              if (src) {
+                const img = await fetchImageForDocx(src);
+                if (img) {
+                  elements.push(
+                    new Paragraph({
+                      children: [
+                        new ImageRun({
+                          data: img.data,
+                          transformation: {
+                            width: img.width,
+                            height: img.height,
+                          },
+                          type: img.type,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                      spacing: { before: 200, after: 200 },
+                    })
+                  );
+                }
+              }
+            } else {
+              const runs = parseInlineNodes(childNode);
+              if (runs.length > 0) {
+                elements.push(
+                  new Paragraph({
+                    children: runs,
+                    alignment: AlignmentType.RIGHT,
+                    spacing: { after: 120 },
+                  })
+                );
+              }
+            }
+          }
+        } else {
+          const runs = parseInlineNodes(el);
+          if (runs.length > 0) {
+            elements.push(
+              new Paragraph({
+                children: runs,
+                alignment: AlignmentType.RIGHT,
+                spacing: { after: 120 },
+              })
+            );
+          }
         }
       } else if (tag === "UL" || tag === "OL") {
         const isOl = tag === "OL";
@@ -337,7 +552,7 @@ function parseHtmlBody(body: HTMLElement): (Paragraph | Table)[] {
   return elements;
 }
 
-function parseHtmlFallback(htmlString: string): (Paragraph | Table)[] {
+async function parseHtmlFallback(htmlString: string): Promise<(Paragraph | Table)[]> {
   if (!htmlString || typeof htmlString !== "string") return [];
 
   // Browser environment
@@ -345,7 +560,7 @@ function parseHtmlFallback(htmlString: string): (Paragraph | Table)[] {
     try {
       const parser = new DOMParser();
       const doc = parser.parseFromString(htmlString, "text/html");
-      const result = parseHtmlBody(doc.body);
+      const result = await parseHtmlBody(doc.body);
       if (result.length > 0) return result;
     } catch (e) {
       console.warn("DOMParser failed:", e);
@@ -411,7 +626,12 @@ export async function exportReportToWord(
       children.push(
         new Paragraph({
           children: [
-            new TextRun({ text: `التخصص: ${specialization.name}`, font: "Cairo", size: 22, color: "718096" }),
+            new TextRun({
+              text: `التخصص: ${specialization.name}`,
+              font: "Cairo",
+              size: 22,
+              color: "718096",
+            }),
           ],
           alignment: AlignmentType.RIGHT,
           spacing: { after: 80 },
@@ -446,8 +666,7 @@ export async function exportReportToWord(
       })
     );
 
-    // Report content resolution:
-    // Try Tiptap JSON first; if empty or invalid, seamlessly use content_html
+    // Report content resolution
     let contentParagraphs: (Paragraph | Table)[] = [];
 
     try {
@@ -463,7 +682,8 @@ export async function exportReportToWord(
       if (contentJson && typeof contentJson === "object" && contentJson.type === "doc") {
         const contentNodes = contentJson.content || [];
         for (const node of contentNodes) {
-          contentParagraphs.push(...parseNode(node));
+          const parsed = await parseNode(node);
+          contentParagraphs.push(...parsed);
         }
       }
     } catch (e) {
@@ -472,14 +692,20 @@ export async function exportReportToWord(
 
     // Fallback to HTML if JSON didn't produce content
     if (contentParagraphs.length === 0 && report.content_html && report.content_html.trim()) {
-      contentParagraphs = parseHtmlFallback(report.content_html);
+      contentParagraphs = await parseHtmlFallback(report.content_html);
     }
 
     // Fallback if still empty
     if (contentParagraphs.length === 0) {
       contentParagraphs.push(
         new Paragraph({
-          children: [new TextRun({ text: "لا يوجد محتوى في هذا التقرير.", font: "Cairo", size: 24 })],
+          children: [
+            new TextRun({
+              text: "لا يوجد محتوى في هذا التقرير.",
+              font: "Cairo",
+              size: 24,
+            }),
+          ],
           alignment: AlignmentType.RIGHT,
         })
       );
@@ -516,7 +742,12 @@ export async function exportReportToWord(
                       bold: true,
                     }),
                     periodLabel
-                      ? new TextRun({ text: ` | ${periodLabel}`, font: "Cairo", size: 20, color: "00AEEF" })
+                      ? new TextRun({
+                          text: ` | ${periodLabel}`,
+                          font: "Cairo",
+                          size: 20,
+                          color: "00AEEF",
+                        })
                       : new TextRun(""),
                   ],
                   alignment: AlignmentType.CENTER,
