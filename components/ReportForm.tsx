@@ -15,11 +15,44 @@ const EMPTY_CONTENT = {
   content: [{ type: "paragraph" }],
 };
 
+function resolveInitialContent(content: any, contentHtml: string | undefined): object | string {
+  if (typeof content === "string" && content.trim().startsWith("{")) {
+    try {
+      content = JSON.parse(content);
+    } catch {
+      // ignore
+    }
+  }
+
+  if (
+    content &&
+    typeof content === "object" &&
+    content.type === "doc" &&
+    Array.isArray(content.content) &&
+    content.content.length > 0
+  ) {
+    const hasOnlyEmptyParagraph =
+      content.content.length === 1 &&
+      content.content[0].type === "paragraph" &&
+      (!content.content[0].content || content.content[0].content.length === 0);
+
+    if (!hasOnlyEmptyParagraph) {
+      return content;
+    }
+  }
+
+  if (contentHtml && contentHtml.trim().length > 0) {
+    return contentHtml;
+  }
+
+  return EMPTY_CONTENT;
+}
+
 interface ReportFormProps {
   initialData?: {
     id?: string;
     title: string;
-    content: object;
+    content: object | string;
     content_html: string;
     specialization_id: string | null;
     report_date: string;
@@ -30,7 +63,9 @@ interface ReportFormProps {
 export default function ReportForm({ initialData }: ReportFormProps) {
   const router = useRouter();
   const [title, setTitle] = useState(initialData?.title || "");
-  const [content, setContent] = useState<object>(initialData?.content || EMPTY_CONTENT);
+  const [content, setContent] = useState<object | string>(() =>
+    resolveInitialContent(initialData?.content, initialData?.content_html)
+  );
   const [contentHtml, setContentHtml] = useState(initialData?.content_html || "");
   const [specId, setSpecId] = useState(initialData?.specialization_id || "");
   const [reportDate, setReportDate] = useState(
@@ -63,7 +98,7 @@ export default function ReportForm({ initialData }: ReportFormProps) {
 
     const payload = {
       title: title.trim(),
-      content,
+      content: typeof content === "object" ? content : { type: "doc", content: [] },
       content_html: contentHtml,
       specialization_id: specId || null,
       report_date: reportDate,
@@ -181,6 +216,7 @@ export default function ReportForm({ initialData }: ReportFormProps) {
 
             {/* Editor */}
             <TiptapEditor
+              key={initialData?.id || "new"}
               content={content}
               onChange={handleEditorChange}
               placeholder="اكتب محتوى التقرير هنا... يمكنك إضافة عناوين وجداول وصور وروابط"

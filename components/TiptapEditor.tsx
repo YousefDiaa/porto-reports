@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -19,7 +19,7 @@ import { TextStyle } from "@tiptap/extension-text-style";
 import EditorToolbar from "./EditorToolbar";
 
 interface TiptapEditorProps {
-  content: object;
+  content: object | string;
   onChange: (json: object, html: string) => void;
   placeholder?: string;
 }
@@ -48,18 +48,30 @@ export default function TiptapEditor({ content, onChange, placeholder }: TiptapE
       Placeholder.configure({ placeholder: placeholder || "اكتب محتوى التقرير هنا..." }),
       CharacterCount,
     ],
-    content: content as object,
+    content: content as any,
     editorProps: {
       attributes: {
         class: "tiptap-editor focus:outline-none",
         dir: "rtl",
       },
     },
+    onCreate: ({ editor }) => {
+      onChange(editor.getJSON(), editor.getHTML());
+    },
     onUpdate: ({ editor }) => {
       onChange(editor.getJSON(), editor.getHTML());
     },
     immediatelyRender: false,
   });
+
+  // Sync content if editor was empty when mounted
+  useEffect(() => {
+    if (editor && content) {
+      if (editor.isEmpty) {
+        editor.commands.setContent(content);
+      }
+    }
+  }, [editor, content]);
 
   const handleImageUpload = useCallback(
     async (file: File) => {
